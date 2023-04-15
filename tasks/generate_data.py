@@ -4,7 +4,7 @@ from createmodels.models import StoreStatus,BusinessHours,StoreTimezone
 from itertools import islice
 from collections import Counter,defaultdict
 from django.db import models 
-from datetime import datetime, timezone,timedelta
+from datetime import datetime, timezone,timedelta,time
 from dateutil import tz
 import numpy as np
 from scipy import interpolate
@@ -95,12 +95,12 @@ def run():
 			BusinessHours.objects.filter( 
 				storeid = OuterRef('storeid') , dayofweek=OuterRef('datetime_local__week_day') 
 			).values('start_time')[:1]  
-		),'00:00:00'), output_field=models.TimeField() ),
+		),time(0,0,0) ), output_field=models.TimeField() ),
 		end_time = Cast( Coalesce( Subquery(
 			BusinessHours.objects.filter( 
 				storeid = OuterRef('storeid') , dayofweek=OuterRef('datetime_local__week_day') 
 			).values('end_time')[:1]  
-		),'24:59:59'), output_field=models.TimeField() ),
+		),time(23,59,59)), output_field=models.TimeField() ),
 		dayofweek = F('datetime_local__week_day') 
 	) 
 		
@@ -136,4 +136,5 @@ def run():
 	print(df.dtypes)
 
 	return 'staticfiles/' + x 	
+	
 	
