@@ -95,12 +95,12 @@ def run():
 			BusinessHours.objects.filter( 
 				storeid = OuterRef('storeid') , dayofweek=OuterRef('datetime_local__week_day') 
 			).values('start_time')[:1]  
-		),0), output_field=models.TimeField() ),
+		),'00:00:00'), output_field=models.TimeField() ),
 		end_time = Cast( Coalesce( Subquery(
 			BusinessHours.objects.filter( 
 				storeid = OuterRef('storeid') , dayofweek=OuterRef('datetime_local__week_day') 
 			).values('end_time')[:1]  
-		),24*60-1), output_field=models.TimeField() ),
+		),'24:59:59'), output_field=models.TimeField() ),
 		dayofweek = F('datetime_local__week_day') 
 	) 
 		
