@@ -17,3 +17,4 @@ print(f'df_store_status:{ len(df_store_status)}  df_timezone:{len(df_timezone)} 
 
 df_timezone.to_csv('store_timezone.csv',index=False)
 df_business_hours.to_csv('business_hours.csv',index=False)
+df_store_status.to_csv('store_status.csv',index=False)
