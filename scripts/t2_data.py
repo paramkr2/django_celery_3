@@ -4,7 +4,7 @@ from createmodels.models import StoreStatus,BusinessHours,StoreTimezone
 from itertools import islice
 from collections import Counter,defaultdict
 from django.db import models 
-from datetime import datetime, timezone,timedelta
+from datetime import datetime, timezone,timedelta,time
 from dateutil import tz
 import numpy as np
 from scipy import interpolate
@@ -21,12 +21,10 @@ def to_hm_int(time):
 	# convert hh:mm:ss into hour*60+min.. or just total minutes 
 	return int(str(time)[:2])*60 + int(str(time)[3:5])
 
-def get_day_uptime(id,day_entries , today , i ):
+def get_day_uptime(id,day_entries ):
 	time_list = []
 	status_list = []
 	day = 0
-	
-	
 	for row in day_entries:
 		date_time = str(row['datetime_local'])[:-2] 
 		time_list.append( to_hm_int ( str(row['datetime_local'])[11:16] ) )
@@ -34,24 +32,15 @@ def get_day_uptime(id,day_entries , today , i ):
 		
 	
 	# Get business hours time range 
-	start_time , end_time = to_hm_int(day_entries[0]['start_time']) , to_hm_int( day_entries[0]['end_time'] )
-	if( i == 0 ): # check for entries before the current time for day 0 
-		max_time_0 = to_hm_int ( str(today)[11:16] )
-		if( start_time < max_time_0   ):
-			if( end_time > max_time_0):
-				end_time = max_time_0 
-		else: 
-			start_time = 0
-			end_time = 0
 
-	
+	start_time , end_time = to_hm_int(day_entries[0]['start_time']) , to_hm_int( day_entries[0]['end_time'] )
 	full_time = np.arange(start_time,end_time,1)
 	ip_func = interpolate.interp1d(time_list, status_list ,kind='nearest',fill_value="extrapolate")
 	new_status_list = ip_func(full_time)
 	
 	return new_status_list,start_time,end_time
 
-def get_results(id,week_list,today):
+def get_results(id,week_list):
 
 	dates = list( week_list.keys() )
 	dates.sort(reverse=True)
@@ -59,7 +48,7 @@ def get_results(id,week_list,today):
 	day_uptime,day_downtime=0,0
 	hour_uptime,hour_downtime = 0,0 	
 	for i,date in enumerate(dates ):
-		lis,st,et = get_day_uptime( id ,week_list[date] , today , i) 
+		lis,st,et = get_day_uptime( id ,week_list[date] ) 
 		if( i == 0 ):
 			# generate day and hour result 
 			day_uptime = sum(lis) 
@@ -106,12 +95,12 @@ def run():
 			BusinessHours.objects.filter( 
 				storeid = OuterRef('storeid') , dayofweek=OuterRef('datetime_local__week_day') 
 			).values('start_time')[:1]  
-		),0), output_field=models.TimeField() ),
+		),time(0,0,0) ), output_field=models.TimeField() ),
 		end_time = Cast( Coalesce( Subquery(
 			BusinessHours.objects.filter( 
 				storeid = OuterRef('storeid') , dayofweek=OuterRef('datetime_local__week_day') 
 			).values('end_time')[:1]  
-		),24*60-1), output_field=models.TimeField() ),
+		),time(23,59,59)), output_field=models.TimeField() ),
 		dayofweek = F('datetime_local__week_day') 
 	) 
 		
@@ -134,14 +123,18 @@ def run():
 			item_dict = { 'storeid':item[0],'datetime_local':item[1],'start_time':item[2],'end_time':item[3] , 'dayofweek':item[4],'status' :item[5] }
 			hmap[date].append( item_dict ) 
 		#print(hmap.keys())
-		res = get_results( id, hmap , today ) 
+		res = get_results( int(id), hmap ) 
 		final_list.append( [id] +  list(res) )
 		if(i%1000==0): print(f' Completed:{i}')
 
 	df = pd.DataFrame(final_list)
-	path = str( 'static/res' + randomstring(10) + '.csv' )
+	x = 'res' + randomstring(10) +'.csv'
+	path = str( 'static/' + x  )
+	
 	df.to_csv(path, index=False,encoding='utf-8')
 	print(df.head())
+	print(df.dtypes)
 
-	return path 	
+	return 'staticfiles/' + x 	
+	
 	
