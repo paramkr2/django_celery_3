@@ -13,6 +13,7 @@ df_store_status = df_store_status[ df_store_status.store_id.isin(store_ids) ]
 		
 print(f'df_store_status:{ len(df_store_status)}  df_timezone:{len(df_timezone)} df_business_hours:{ len(df_business_hours)} ')
 
-df_timezone.to_csv('store_timezone.csv')
-df_business_hours.to_csv('business_hours.csv')
-df_store_status.to_csv('store_status.csv')
+
+
+df_timezone.to_csv('store_timezone.csv',index=False)
+df_business_hours.to_csv('business_hours.csv',index=False)
