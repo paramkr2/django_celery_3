@@ -3,5 +3,7 @@ __pycache__
 *.sqlite3
 .DS_Store
 staticfiles
-files/
+files/business_hours_base*
+files/store_status_base*
+files/store_timezone_base*
 .git/

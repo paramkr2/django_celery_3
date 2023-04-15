@@ -25,10 +25,10 @@ CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://default:xP6JtBI
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True 
+DEBUG = False  
 
-ALLOWED_HOSTS = ['djangocelery2-production.up.railway.app', '127.0.0.1']
-CSRF_TRUSTED_ORIGINS = ['https://web-production-3640.up.railway.app']
+ALLOWED_HOSTS = ['djangocelery2-production.up.railway.app','django-celery.onrender.com', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://web-production-3640.up.railway.app','https://django-celery.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+	'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -79,8 +80,12 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "ENGINE": 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'railway', 
+        'USER': 'postgres',
+        'PASSWORD': 'KY9ta1yYO8tU8hqOk2dH',
+        'HOST': 'containers-us-west-183.railway.app', 
+        'PORT': '6313',
     }
 }
 
