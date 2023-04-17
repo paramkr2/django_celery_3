@@ -1,8 +1,19 @@
-# Business Modentering | Django + Celery
+# Business Monitoring| Django + Celery
 
 ## Deployed Website: 
 https://djangocelery2-production.up.railway.app/
 
+##Environment Variables:
+`
+DEBUG
+SECRET_KEY
+DJANGO_ALLOWED_HOSTS
+CELERY_BROKER
+CELERY_BACKEND
+DB_HOST
+DB_PASSWORD
+DB_PORT
+`
 ## Two API endpoints 
     1. /trigger_report endpoint that will trigger report generation from the data provided (stored in DB)
         1. No input 
