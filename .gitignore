@@ -7,5 +7,4 @@ files/business_hours_base*
 files/store_status_base*
 files/store_timezone_base*
 .git/
-csv/*
 *.ps1
