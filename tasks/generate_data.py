@@ -1,6 +1,6 @@
 
 import csv
-from createmodels.models import StoreStatus,BusinessHours,StoreTimezone
+from tasks.models import StoreStatus,BusinessHours,StoreTimezone
 from itertools import islice
 from collections import Counter,defaultdict
 from django.db import models 
@@ -129,12 +129,12 @@ def run():
 
 	df = pd.DataFrame(final_list)
 	x = 'res' + randomstring(10) +'.csv'
-	path = str( 'static/' + x  )
+	path = str( 'csv/' + x  )
 	
 	df.to_csv(path, index=False,encoding='utf-8')
 	print(df.head())
 	print(df.dtypes)
 
-	return 'staticfiles/' + x 	
+	return 'csv/' + x 	
 	
 	

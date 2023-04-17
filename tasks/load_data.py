@@ -1,6 +1,6 @@
 
 import csv
-from createmodels.models import StoreStatus,BusinessHours,StoreTimezone
+from tasks.models import StoreStatus,BusinessHours,StoreTimezone
 from itertools import islice
 from collections import defaultdict
 from datetime import datetime, timezone

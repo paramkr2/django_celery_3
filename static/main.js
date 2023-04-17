@@ -28,7 +28,7 @@ function getStatus(taskID) {
       <tr>
         <td>${res.task_id}</td>
         <td>${res.task_status}</td>
-        <td>  <a href="${res.task_result}">${res.task_result}</a>$</td>
+        <td>  <a href="${res.task_result}">${res.task_result}</a></td>
       </tr>`
     $('#tasks').prepend(html);
 

@@ -3,6 +3,9 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from tasks.sample_tasks import create_task
 from celery.result import AsyncResult
+from django.http import FileResponse
+import os
+
 def home(request):
     return render(request, "home.html")
 
@@ -26,3 +29,10 @@ def get_report(request, task_id):
 	if request.POST :
 		return JsonResponse(result, status=202)
 	return JsonResponse(result, status=200)
+	
+def download_csv(request,filename):
+	
+	file_path = pwd = os.path.dirname(__file__) + f'/../csv/{filename}'
+	file = open(file_path, 'rb')
+	response = FileResponse(file)
+	return response

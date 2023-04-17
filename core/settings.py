@@ -15,8 +15,8 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://default:xP6JtBIJS2MAPfoLMxZS@containers-us-west-48.railway.app:7317")
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://default:xP6JtBIJS2MAPfoLMxZS@containers-us-west-48.railway.app:7317")
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -25,7 +25,7 @@ CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://default:xP6JtBI
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  
+DEBUG = os.environ.get("DEBUG")  
 
 ALLOWED_HOSTS = ['djangocelery2-production.up.railway.app','django-celery.onrender.com', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://web-production-3640.up.railway.app','https://django-celery.onrender.com']
@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "tasks",
-	"createmodels",
 	'django_extensions',
 ]
 
@@ -83,9 +82,9 @@ DATABASES = {
         "ENGINE": 'django.db.backends.postgresql_psycopg2',
         'NAME': 'railway', 
         'USER': 'postgres',
-        'PASSWORD': 'KY9ta1yYO8tU8hqOk2dH',
-        'HOST': 'containers-us-west-183.railway.app', 
-        'PORT': '6313',
+        'PASSWORD': os.environ.get("DB_PASSWORD") ,
+        'HOST': os.environ.get('DB_HOST'), 
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
@@ -134,6 +133,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

@@ -1,6 +1,6 @@
 
 import csv
-from createmodels.models import StoreStatus,BusinessHours,StoreTimezone
+from tasks.models import StoreStatus,BusinessHours,StoreTimezone
 from itertools import islice
 from collections import Counter,defaultdict
 from django.db import models 
