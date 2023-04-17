@@ -3,7 +3,7 @@
 ## Deployed Website: 
 https://djangocelery2-production.up.railway.app/
 
-##Environment Variables:
+## Environment Variables:
 `
 DEBUG
 SECRET_KEY
